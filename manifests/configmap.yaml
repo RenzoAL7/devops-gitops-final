@@ -14,5 +14,6 @@ data:
       <h1>GitOps con Argo CD en K3s</h1>
       <p>Aplicacion desplegada desde Git usando Argo CD.</p>
       <p>Version: v1</p>
+      <p>Provando Cambio</p>
     </body>
     </html>
