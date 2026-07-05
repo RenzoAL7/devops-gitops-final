@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/RenzoAL7/devops-gitops-final.git
     targetRevision: main
-    path: k8s
+    path: manifests
 
   destination:
     server: https://kubernetes.default.svc
