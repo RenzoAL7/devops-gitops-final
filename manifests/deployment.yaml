@@ -16,22 +16,18 @@ spec:
         app: devops-demo-app
     spec:
       containers:
-        - name: nginx
-          image: nginx:1.27-alpine
+        - name: gitops-sentiment-demo
+          image: ghcr.io/renzoal7/gitops-sentiment-demo:main-3d19e87
+          imagePullPolicy: Always
           ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: html
-              mountPath: /usr/share/nginx/html/index.html
-              subPath: index.html
+            - containerPort: 8000
+          env:
+            - name: APP_MODE
+              value: PRODUCTION
           resources:
             requests:
-              cpu: 50m
-              memory: 64Mi
+              cpu: 100m
+              memory: 256Mi
             limits:
-              cpu: 200m
-              memory: 128Mi
-      volumes:
-        - name: html
-          configMap:
-            name: devops-demo-page
+              cpu: 500m
+              memory: 512Mi
