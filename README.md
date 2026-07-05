@@ -24,3 +24,17 @@ Argo CD detecta cambios
 Argo CD sincroniza el cluster K3s
    ↓
 La aplicación queda desplegada en Kubernetes
+```
+
+## Monitoring
+
+El stack de observabilidad se despliega con una segunda Argo CD Application:
+
+- `argocd/monitoring-application.yaml`
+
+Esta aplicación instala `kube-prometheus-stack` desde Helm y deja disponibles:
+
+- Prometheus
+- Grafana
+
+Se usa una configuración simplificada para K3s y Free Tier.
