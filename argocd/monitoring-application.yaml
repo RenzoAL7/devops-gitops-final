@@ -14,6 +14,8 @@ spec:
       values:  |
         crds:
           enabled: true
+          upgradeJob:
+            enabled: true
 
         fullnameOverride: monitoring-stack
 
@@ -49,15 +51,22 @@ spec:
           service:
             type: ClusterIP
           prometheusSpec:
-            retention: 7d
+            replicas: 1
+            retention: 3d
             scrapeInterval: 30s
+            walCompression: true
+            # Keep Prometheus ephemeral for the course demo and K3s single-node.
+            # This avoids PVC-related stalls while Argo CD waits for health.
+            storageSpec:
+              emptyDir:
+                sizeLimit: 5Gi
             resources:
               requests:
                 cpu: 200m
-                memory: 768Mi
+                memory: 512Mi
               limits:
                 cpu: 500m
-                memory: 1536Mi
+                memory: 1024Mi
 
         kube-state-metrics:
           resources:
