@@ -17,13 +17,16 @@ spec:
     spec:
       containers:
         - name: gitops-sentiment-demo
-          image: ghcr.io/renzoal7/gitops-sentiment-demo:main-3d19e87
+          # Replace latest with main-<commit-sha> for immutable releases.
+          image: ghcr.io/renzoal7/gitops-sentiment-demo:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
             - name: APP_MODE
               value: PRODUCTION
+            - name: SENTIMENT_SERVICE_URL
+              value: http://sentiment-service:8001
           resources:
             requests:
               cpu: 100m

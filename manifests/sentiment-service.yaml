@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentiment-service
+  namespace: devops-course
+  labels:
+    app: sentiment-service
+    component: model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sentiment-service
+      component: model
+  template:
+    metadata:
+      labels:
+        app: sentiment-service
+        component: model
+    spec:
+      containers:
+        - name: sentiment-service
+          # Replace latest with main-<commit-sha> for immutable releases.
+          image: ghcr.io/renzoal7/gitops-sentiment-demo-sentiment-service:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8001
+          env:
+            - name: MODEL_DIR
+              value: /app/modelo_onnx/modelo_quantized
+            - name: MAX_SEQUENCE_LENGTH
+              value: "128"
+            - name: TRANSFORMERS_OFFLINE
+              value: "1"
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 768Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentiment-service
+  namespace: devops-course
+  labels:
+    app: sentiment-service
+spec:
+  type: ClusterIP
+  selector:
+    app: sentiment-service
+    component: model
+  ports:
+    - name: http
+      port: 8001
+      targetPort: http

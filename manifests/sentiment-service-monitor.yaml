@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sentiment-service
+  namespace: devops-course
+  labels:
+    app: sentiment-service
+    release: monitoring-stack
+spec:
+  namespaceSelector:
+    matchNames:
+      - devops-course
+  selector:
+    matchLabels:
+      app: sentiment-service
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
